@@ -1,11 +1,21 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+} from 'react-native';
 import { Card, CardRow } from '../components';
 import * as genHelper from '../helper/GeneratorHelper';
 
 const HomeScreen = () => {
   const numArr = genHelper.generateRandomNumber(5);
   const pairArr = genHelper.generatePairsInArray(numArr);
+
+  const restart = () => {
+    console.log('restart');
+  };
 
   const generateCard = () => {
     let cardArr = [];
@@ -39,13 +49,18 @@ const HomeScreen = () => {
 
   return (
     <>
-      <View
-        style={{
-          flex: 0,
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-        }}
-      >
+      <View style={styles.mainContainer}>
+        <View style={styles.topContainer}>
+          <TouchableHighlight
+            activeOpacity={0.6}
+            underlayColor="#DDDDDD"
+            onPress={restart}
+          >
+            <Text>Restart</Text>
+          </TouchableHighlight>
+
+          <Text>Steps:0</Text>
+        </View>
         <ScrollView>{generateCard()}</ScrollView>
       </View>
     </>
@@ -53,8 +68,16 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 30,
+  mainContainer: {
+    flex: 0,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  topContainer: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 10,
   },
 });
 
