@@ -1,33 +1,16 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 const Card = ({ num }) => {
   const createDummyElement = () => (
-    <View
-      style={{
-        marginVertical: 5,
-        backgroundColor: 'yellow',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-        display: 'none',
-      }}
-    >
+    <View style={[styles.cardContainer, { display: 'none' }]}>
       <Text>{num}</Text>
     </View>
   );
 
   const createElement = () => (
-    <View
-      style={{
-        marginVertical: 5,
-        backgroundColor: 'pink',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-      }}
-    >
+    <View style={styles.cardContainer}>
       <Text>{num}</Text>
     </View>
   );
@@ -49,4 +32,18 @@ const Card = ({ num }) => {
 Card.propTypes = {
   num: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    marginVertical: 5,
+    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    borderWidth: 5,
+    borderColor: 'gray',
+    borderRadius: 6,
+  },
+});
+
 export default Card;
