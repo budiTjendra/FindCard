@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,27 +6,31 @@ import {
   Text,
   TouchableHighlight,
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardRow } from '../components';
 import * as genHelper from '../helper/GeneratorHelper';
+import * as actionCreator from '../redux/actionCreators';
 
+const { initPairArray } = actionCreator;
 const HomeScreen = () => {
   const PAIR = 4;
-  const [pairArr, setPairArr] = useState([]);
+  const dispatch = useDispatch();
+  const pairArr = useSelector(state => state.pairArray);
 
   useEffect(() => {
     generateNums();
     return () => {};
-  }, []);
+  }, [generateNums]);
 
   const restart = () => {
     generateNums();
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const generateNums = () => {
     const numArr = genHelper.generateRandomNumber(PAIR);
     const _pairArr = genHelper.generatePairsInArray(numArr);
-
-    setPairArr(_pairArr);
+    dispatch(initPairArray(_pairArr));
   };
 
   const generateCard = () => {

@@ -1,0 +1,1 @@
+export const INIT_PAIR_ARRAY = 'INIT_PAIR_ARRAY';
