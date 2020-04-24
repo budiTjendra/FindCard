@@ -2,7 +2,7 @@
 export const generateRandomNumber = (X) => {    
     let numArr = []
 
-    while(numArr.length <= X){
+    while(numArr.length < X){
       const num = Math.floor(Math.random() * 100)
       if (numArr.indexOf(num) === -1){
         numArr.push(num)
