@@ -10,6 +10,7 @@ import { Card, CardRow } from '../components';
 import * as genHelper from '../helper/GeneratorHelper';
 
 const HomeScreen = () => {
+  const PAIR = 4;
   const [pairArr, setPairArr] = useState([]);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const HomeScreen = () => {
   };
 
   const generateNums = () => {
-    const numArr = genHelper.generateRandomNumber(5);
+    const numArr = genHelper.generateRandomNumber(PAIR);
     const _pairArr = genHelper.generatePairsInArray(numArr);
 
     setPairArr(_pairArr);
@@ -58,6 +59,8 @@ const HomeScreen = () => {
     return cardRowArr;
   };
 
+  const bounces = PAIR > 4;
+
   return (
     <>
       <View style={styles.mainContainer}>
@@ -72,7 +75,7 @@ const HomeScreen = () => {
 
           <Text>Steps:0</Text>
         </View>
-        <ScrollView>{generateCard()}</ScrollView>
+        <ScrollView bounces={bounces}>{generateCard()}</ScrollView>
       </View>
     </>
   );
