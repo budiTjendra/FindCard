@@ -11,7 +11,7 @@ const CardRow = props => {
   const dummyArrElement = dummyLength !== 0 ? [] : null;
   for (let i = 0; i < dummyLength; i++) {
     const key = `dummy-${i}`;
-    dummyArrElement.push(<Card num="00" key={key} />);
+    dummyArrElement.push(<Card num="dummy" key={key} />);
   }
   return (
     <View
