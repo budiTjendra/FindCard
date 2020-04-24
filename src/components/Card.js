@@ -1,8 +1,12 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import PropTypes from 'prop-types';
 
 const Card = ({ num }) => {
+  const onClick = () => {
+    console.log('click');
+  };
+
   const createDummyElement = () => (
     <View style={[styles.cardContainer, { display: 'none' }]}>
       <Text>{num}</Text>
@@ -10,9 +14,11 @@ const Card = ({ num }) => {
   );
 
   const createElement = () => (
-    <View style={styles.cardContainer}>
-      <Text>{num}</Text>
-    </View>
+    <TouchableWithoutFeedback onPress={onClick}>
+      <View style={styles.cardContainer}>
+        <Text>{num}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 
   const element = num === 'dummy' ? createDummyElement() : createElement();
