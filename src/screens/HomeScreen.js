@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,11 +10,22 @@ import { Card, CardRow } from '../components';
 import * as genHelper from '../helper/GeneratorHelper';
 
 const HomeScreen = () => {
-  const numArr = genHelper.generateRandomNumber(5);
-  const pairArr = genHelper.generatePairsInArray(numArr);
+  const [pairArr, setPairArr] = useState([]);
+
+  useEffect(() => {
+    generateNums();
+    return () => {};
+  }, []);
 
   const restart = () => {
-    console.log('restart');
+    generateNums();
+  };
+
+  const generateNums = () => {
+    const numArr = genHelper.generateRandomNumber(5);
+    const _pairArr = genHelper.generatePairsInArray(numArr);
+
+    setPairArr(_pairArr);
   };
 
   const generateCard = () => {
