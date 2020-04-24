@@ -1,10 +1,16 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import * as actionCreator from '../redux/actionCreators';
+
+const { increaseStepCount } = actionCreator;
 
 const Card = ({ num }) => {
+  const dispatch = useDispatch();
+
   const onClick = () => {
-    console.log('click');
+    dispatch(increaseStepCount());
   };
 
   const createDummyElement = () => (

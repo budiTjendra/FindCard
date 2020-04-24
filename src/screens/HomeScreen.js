@@ -11,7 +11,7 @@ import { Card, CardRow } from '../components';
 import * as genHelper from '../helper/GeneratorHelper';
 import * as actionCreator from '../redux/actionCreators';
 
-const { initPairArray } = actionCreator;
+const { initPairArray, reset } = actionCreator;
 const HomeScreen = () => {
   const PAIR = 4;
   const dispatch = useDispatch();
@@ -31,6 +31,7 @@ const HomeScreen = () => {
     const numArr = genHelper.generateRandomNumber(PAIR);
     const _pairArr = genHelper.generatePairsInArray(numArr);
     dispatch(initPairArray(_pairArr));
+    dispatch(reset());
   };
 
   const generateCard = () => {
