@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Card, CardRow } from '../components';
 import * as genHelper from '../helper/GeneratorHelper';
 
 const HomeScreen = () => {
-  const numArr = genHelper.generateRandomNumber(4);
+  const numArr = genHelper.generateRandomNumber(5);
   const pairArr = genHelper.generatePairsInArray(numArr);
 
   const generateCard = () => {
@@ -46,7 +46,7 @@ const HomeScreen = () => {
           justifyContent: 'space-around',
         }}
       >
-        {generateCard()}
+        <ScrollView>{generateCard()}</ScrollView>
       </View>
     </>
   );
