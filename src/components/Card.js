@@ -94,10 +94,12 @@ class Card extends React.Component {
       if (this.value !== 0) {
         setTimeout(() => {
           this.flipCard();
-        }, 100);
+        }, 10);
       }
 
-      this.setState({ num: nextProps.num });
+      setTimeout(() => {
+        this.setState({ num: nextProps.num });
+      }, 100);
     }
   }
 
