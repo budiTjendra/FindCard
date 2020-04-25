@@ -5,6 +5,7 @@ import {
   ScrollView,
   Text,
   TouchableHighlight,
+  Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardRow } from '../components';
@@ -13,9 +14,11 @@ import * as actionCreator from '../redux/actionCreators';
 
 const { initPairArray, reset } = actionCreator;
 const HomeScreen = () => {
-  const PAIR = 4;
+  const PAIR = 2;
   const dispatch = useDispatch();
   const pairArr = useSelector(state => state.pairArray);
+  const stepCount = useSelector(state => state.stepCount);
+  const disabledIndexArray = useSelector(state => state.disabledIndexArray);
 
   useEffect(() => {
     generateNums();
@@ -64,6 +67,14 @@ const HomeScreen = () => {
     return cardRowArr;
   };
 
+  const createAlert = () =>
+    Alert.alert(
+      'Congratulation',
+      `You finished with ${stepCount}  moves`,
+      [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+      { cancelable: false }
+    );
+
   const bounces = PAIR > 4;
 
   return (
@@ -78,8 +89,11 @@ const HomeScreen = () => {
             <Text>Restart</Text>
           </TouchableHighlight>
 
-          <Text>Steps:0</Text>
+          <Text>Steps:{stepCount}</Text>
         </View>
+        {disabledIndexArray.length === pairArr.length &&
+          pairArr.length !== 0 &&
+          createAlert()}
         <ScrollView bounces={bounces}>{generateCard()}</ScrollView>
       </View>
     </>
