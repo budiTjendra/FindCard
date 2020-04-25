@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -12,17 +12,18 @@ import * as actionCreator from '../redux/actionCreators';
 
 const { increaseStepCount, openCard } = actionCreator;
 
-class Card extends Component {
+class Card extends React.Component {
   constructor(props) {
     super(props);
-    const { num } = this.props;
+    const { num, cardIndex } = this.props;
     this.state = {
       num,
+      cardIndex,
+      forceClose: false,
     };
   }
 
   componentWillMount() {
-    console.log('componentWillMount');
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
     this.animatedValue.addListener(({ value }) => {
@@ -43,18 +44,62 @@ class Card extends Component {
       increaseStepCount: increaseStepCountAction,
       openCard: openCardAction,
       firstCard,
+      firstCardIndex,
+      visitedArray,
+      disabledIndexArray,
     } = this.props;
 
-    const { num } = this.state;
+    const { num, cardIndex } = this.state;
+
+    if (disabledIndexArray.indexOf(cardIndex) !== -1) {
+      return;
+    }
+
+    console.log(
+      { cardIndex },
+      { firstCardIndex },
+      { num },
+      { firstCard },
+      { visitedArray }
+    );
+
     increaseStepCountAction();
+
     if (firstCard !== undefined) {
-      if (firstCard !== num) {
-        console.log('ANIMATE CLOSED CARD');
+      if (firstCard !== num && cardIndex !== firstCardIndex) {
+        setTimeout(() => {
+          this.flipCard();
+        }, 500);
+      } else {
+        console.log('MATCH');
       }
     }
-    openCardAction(num);
+    openCardAction({ num, cardIndex });
     this.flipCard();
   };
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { num, visitedArray } = this.props;
+    /*
+    if (visitedArray !== undefined) {
+      if (visitedArray.length !== 0) {
+        return;
+      }
+    }
+*/
+    if (nextProps.num !== num) {
+      // Perform some operation
+
+      if (this.value !== 0) {
+        setTimeout(() => {
+          this.flipCard();
+        }, 100);
+      }
+
+      this.setState({ num: nextProps.num });
+    }
+  }
 
   flipCard() {
     console.log(this.value);
@@ -89,18 +134,14 @@ class Card extends Component {
     );
 
     const createElement = () => (
-      <TouchableWithoutFeedback onPress={this.onClick}>
+      <TouchableWithoutFeedback onPress={this.onClick} key={num}>
         <View style={{ flex: 1 }}>
-          {true && (
-            <Animated.View style={[styles.cardContainer, frontAnimatedStyle]}>
-              <Text>?</Text>
-            </Animated.View>
-          )}
-          {true && (
-            <Animated.View style={[styles.cardContainer2, backAnimatedStyle]}>
-              <Text>{num}</Text>
-            </Animated.View>
-          )}
+          <Animated.View style={[styles.cardContainer, frontAnimatedStyle]}>
+            <Text>?</Text>
+          </Animated.View>
+          <Animated.View style={[styles.cardContainer2, backAnimatedStyle]}>
+            <Text>{num}</Text>
+          </Animated.View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -151,10 +192,20 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { stepCount, firstCard } = state;
+  const {
+    stepCount,
+    firstCard,
+    firstCardIndex,
+    visitedArray,
+    flipBackCard,
+    disabledIndexArray,
+  } = state;
   return {
     stepCount,
     firstCard,
+    firstCardIndex,
+    visitedArray,
+    disabledIndexArray,
   };
 };
 
@@ -163,6 +214,10 @@ Card.propTypes = {
   increaseStepCount: PropTypes.func,
   openCard: PropTypes.func,
   firstCard: PropTypes.number,
+  firstCardIndex: PropTypes.number,
+  cardIndex: PropTypes.number,
+  visitedArray: PropTypes.array,
+  disabledIndexArray: PropTypes.array,
 };
 
 export default connect(mapStateToProps, { increaseStepCount, openCard })(Card);
