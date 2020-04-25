@@ -3,6 +3,7 @@
   "rules": {
     "no-use-before-define": "off",
     "no-plusplus": "off",
-    "array-callback-return": "warn"
+    "array-callback-return": "warn",
+    "no-else-return": "off"
   }
 }
