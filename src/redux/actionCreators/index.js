@@ -1,6 +1,6 @@
 import * as actionType from '../actionTypes';
 
-const { INIT_PAIR_ARRAY, INCREASE_STEP_COUNT, RESET } = actionType;
+const { INIT_PAIR_ARRAY, INCREASE_STEP_COUNT, RESET, OPEN_CARD } = actionType;
 // Action Creators
 
 export function initPairArray(arr) {
@@ -19,5 +19,12 @@ export function increaseStepCount() {
 export function reset() {
   return {
     type: RESET,
+  };
+}
+
+export function openCard(num) {
+  return {
+    type: OPEN_CARD,
+    payload: num,
   };
 }

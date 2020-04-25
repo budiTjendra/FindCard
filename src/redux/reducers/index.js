@@ -1,13 +1,14 @@
 // import the dependency
 import * as actionType from '../actionTypes';
 
-const { INIT_PAIR_ARRAY, RESET, INCREASE_STEP_COUNT } = actionType;
+const { INIT_PAIR_ARRAY, RESET, INCREASE_STEP_COUNT, OPEN_CARD } = actionType;
 
 // reducer
 
 const initialState = {
   pairArray: [],
   stepCount: 0,
+  firstCard: undefined,
 };
 
 function notesReducer(state = initialState, action) {
@@ -21,6 +22,12 @@ function notesReducer(state = initialState, action) {
       return { ...state, stepCount: state.stepCount + 1 };
     case RESET:
       return { ...state, stepCount: 0 };
+    case OPEN_CARD:
+      const { firstCard } = state;
+      if (firstCard === undefined) {
+        return { ...state, firstCard: payload };
+      }
+      return state;
     default:
       return state;
   }
