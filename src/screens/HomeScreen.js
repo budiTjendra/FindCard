@@ -47,9 +47,9 @@ const HomeScreen = () => {
       cardArr = [];
     };
 
-    pairArr.map(item => {
+    pairArr.map((item, index) => {
       count += 1;
-      const cardElement = <Card num={item} key={count} />;
+      const cardElement = <Card num={item} key={count} cardIndex={index} />;
       cardArr.push(cardElement);
 
       if (count % 3 === 0 && count !== 0) {

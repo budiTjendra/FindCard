@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -12,13 +12,16 @@ import * as actionCreator from '../redux/actionCreators';
 
 const { increaseStepCount, openCard } = actionCreator;
 
-class Card extends Component {
+class Card extends React.Component {
   constructor(props) {
     super(props);
-    const { num } = this.props;
+    const { num, cardIndex } = this.props;
     this.state = {
       num,
+      cardIndex,
     };
+
+    console.log('ASDASD');
   }
 
   componentWillMount() {
@@ -45,16 +48,25 @@ class Card extends Component {
       firstCard,
     } = this.props;
 
-    const { num } = this.state;
+    const { num, cardIndex } = this.state;
     increaseStepCountAction();
     if (firstCard !== undefined) {
       if (firstCard !== num) {
         console.log('ANIMATE CLOSED CARD');
       }
     }
-    openCardAction(num);
+    openCardAction({ num, cardIndex });
     this.flipCard();
   };
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { num } = this.props;
+    if (nextProps.num !== num) {
+      // Perform some operation
+      this.setState({ num: nextProps.num });
+    }
+  }
 
   flipCard() {
     console.log(this.value);
@@ -89,18 +101,14 @@ class Card extends Component {
     );
 
     const createElement = () => (
-      <TouchableWithoutFeedback onPress={this.onClick}>
+      <TouchableWithoutFeedback onPress={this.onClick} key={num}>
         <View style={{ flex: 1 }}>
-          {true && (
-            <Animated.View style={[styles.cardContainer, frontAnimatedStyle]}>
-              <Text>?</Text>
-            </Animated.View>
-          )}
-          {true && (
-            <Animated.View style={[styles.cardContainer2, backAnimatedStyle]}>
-              <Text>{num}</Text>
-            </Animated.View>
-          )}
+          <Animated.View style={[styles.cardContainer, frontAnimatedStyle]}>
+            <Text>{num}</Text>
+          </Animated.View>
+          <Animated.View style={[styles.cardContainer2, backAnimatedStyle]}>
+            <Text>{num}</Text>
+          </Animated.View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -163,6 +171,7 @@ Card.propTypes = {
   increaseStepCount: PropTypes.func,
   openCard: PropTypes.func,
   firstCard: PropTypes.number,
+  cardIndex: PropTypes.number,
 };
 
 export default connect(mapStateToProps, { increaseStepCount, openCard })(Card);

@@ -22,9 +22,9 @@ export function reset() {
   };
 }
 
-export function openCard(num) {
+export function openCard(payload) {
   return {
     type: OPEN_CARD,
-    payload: num,
+    payload,
   };
 }

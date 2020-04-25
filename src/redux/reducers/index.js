@@ -9,6 +9,7 @@ const initialState = {
   pairArray: [],
   stepCount: 0,
   firstCard: undefined,
+  firstCardIndex: undefined,
 };
 
 function notesReducer(state = initialState, action) {
@@ -21,11 +22,14 @@ function notesReducer(state = initialState, action) {
       console.log(state.stepCount + 1);
       return { ...state, stepCount: state.stepCount + 1 };
     case RESET:
-      return { ...state, stepCount: 0 };
+      return { ...state };
     case OPEN_CARD:
+      // eslint-disable-next-line no-case-declarations
       const { firstCard } = state;
+      // eslint-disable-next-line no-case-declarations
+      const { num, cardIndex } = payload;
       if (firstCard === undefined) {
-        return { ...state, firstCard: payload };
+        return { ...state, firstCard: num, firstCardIndex: cardIndex };
       }
       return state;
     default:
