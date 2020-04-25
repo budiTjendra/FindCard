@@ -19,13 +19,11 @@ class Card extends React.Component {
     this.state = {
       num,
       cardIndex,
+      forceClose: false,
     };
-
-    console.log('ASDASD');
   }
 
   componentWillMount() {
-    console.log('componentWillMount');
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
     this.animatedValue.addListener(({ value }) => {
@@ -46,9 +44,13 @@ class Card extends React.Component {
       increaseStepCount: increaseStepCountAction,
       openCard: openCardAction,
       firstCard,
+      firstCardIndex,
     } = this.props;
 
     const { num, cardIndex } = this.state;
+
+    console.log({ cardIndex }, { firstCardIndex });
+
     increaseStepCountAction();
     if (firstCard !== undefined) {
       if (firstCard !== num) {
@@ -64,6 +66,10 @@ class Card extends React.Component {
     const { num } = this.props;
     if (nextProps.num !== num) {
       // Perform some operation
+      if (this.value !== 0) {
+        this.flipCard();
+      }
+
       this.setState({ num: nextProps.num });
     }
   }
@@ -104,7 +110,7 @@ class Card extends React.Component {
       <TouchableWithoutFeedback onPress={this.onClick} key={num}>
         <View style={{ flex: 1 }}>
           <Animated.View style={[styles.cardContainer, frontAnimatedStyle]}>
-            <Text>{num}</Text>
+            <Text>?</Text>
           </Animated.View>
           <Animated.View style={[styles.cardContainer2, backAnimatedStyle]}>
             <Text>{num}</Text>
@@ -159,10 +165,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { stepCount, firstCard } = state;
+  const { stepCount, firstCard, firstCardIndex } = state;
   return {
     stepCount,
     firstCard,
+    firstCardIndex,
   };
 };
 
@@ -171,6 +178,7 @@ Card.propTypes = {
   increaseStepCount: PropTypes.func,
   openCard: PropTypes.func,
   firstCard: PropTypes.number,
+  firstCardIndex: PropTypes.number,
   cardIndex: PropTypes.number,
 };
 
