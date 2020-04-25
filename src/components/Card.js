@@ -45,16 +45,33 @@ class Card extends React.Component {
       openCard: openCardAction,
       firstCard,
       firstCardIndex,
+      visitedArray,
+      disabledIndexArray,
     } = this.props;
 
     const { num, cardIndex } = this.state;
 
-    console.log({ cardIndex }, { firstCardIndex });
+    if (disabledIndexArray.indexOf(cardIndex) !== -1) {
+      return;
+    }
+
+    console.log(
+      { cardIndex },
+      { firstCardIndex },
+      { num },
+      { firstCard },
+      { visitedArray }
+    );
 
     increaseStepCountAction();
+
     if (firstCard !== undefined) {
-      if (firstCard !== num) {
-        console.log('ANIMATE CLOSED CARD');
+      if (firstCard !== num && cardIndex !== firstCardIndex) {
+        setTimeout(() => {
+          this.flipCard();
+        }, 500);
+      } else {
+        console.log('MATCH');
       }
     }
     openCardAction({ num, cardIndex });
@@ -63,11 +80,21 @@ class Card extends React.Component {
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { num } = this.props;
+    const { num, visitedArray } = this.props;
+    /*
+    if (visitedArray !== undefined) {
+      if (visitedArray.length !== 0) {
+        return;
+      }
+    }
+*/
     if (nextProps.num !== num) {
       // Perform some operation
+
       if (this.value !== 0) {
-        this.flipCard();
+        setTimeout(() => {
+          this.flipCard();
+        }, 100);
       }
 
       this.setState({ num: nextProps.num });
@@ -165,11 +192,20 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { stepCount, firstCard, firstCardIndex } = state;
+  const {
+    stepCount,
+    firstCard,
+    firstCardIndex,
+    visitedArray,
+    flipBackCard,
+    disabledIndexArray,
+  } = state;
   return {
     stepCount,
     firstCard,
     firstCardIndex,
+    visitedArray,
+    disabledIndexArray,
   };
 };
 
@@ -180,6 +216,8 @@ Card.propTypes = {
   firstCard: PropTypes.number,
   firstCardIndex: PropTypes.number,
   cardIndex: PropTypes.number,
+  visitedArray: PropTypes.array,
+  disabledIndexArray: PropTypes.array,
 };
 
 export default connect(mapStateToProps, { increaseStepCount, openCard })(Card);
