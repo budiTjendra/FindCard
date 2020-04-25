@@ -69,7 +69,7 @@ function notesReducer(state = initialState, action) {
           { num }
         );
 
-        if (firstCard === num) {
+        if (firstCard === num && firstCardIndex !== cardIndex) {
           disabledIndexArray.push(firstCardIndex);
           disabledIndexArray.push(cardIndex);
           console.log('push to disabledIndexArray ', { disabledIndexArray });
