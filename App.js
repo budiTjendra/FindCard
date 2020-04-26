@@ -5,8 +5,6 @@ import { Provider as StoreProvider } from 'react-redux';
 import HomeScreen from './src/screens/HomeScreen';
 import store from './src/redux/store';
 
-// export default createAppContainer(navigator);
-
 // React Native: App
 export default function App() {
   const navigator = createStackNavigator(

@@ -10,7 +10,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actionCreator from '../redux/actionCreators';
 
-const { increaseStepCount, openCard } = actionCreator;
+const {
+  increaseStepCount,
+  openCard,
+  closeFirstCard,
+  flipSuccess,
+} = actionCreator;
 
 class Card extends React.Component {
   constructor(props) {
@@ -19,11 +24,10 @@ class Card extends React.Component {
     this.state = {
       num,
       cardIndex,
-      forceClose: false,
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.animatedValue = new Animated.Value(0);
     this.value = 0;
     this.animatedValue.addListener(({ value }) => {
@@ -43,6 +47,7 @@ class Card extends React.Component {
     const {
       increaseStepCount: increaseStepCountAction,
       openCard: openCardAction,
+      closeFirstCard: closeFirstCardAction,
       firstCard,
       firstCardIndex,
       visitedArray,
@@ -51,17 +56,10 @@ class Card extends React.Component {
 
     const { num, cardIndex } = this.state;
 
+    //console.log({ disabledIndexArray });
     if (disabledIndexArray.indexOf(cardIndex) !== -1) {
       return;
     }
-
-    console.log(
-      { cardIndex },
-      { firstCardIndex },
-      { num },
-      { firstCard },
-      { visitedArray }
-    );
 
     increaseStepCountAction();
 
@@ -71,23 +69,42 @@ class Card extends React.Component {
           this.flipCard();
         }, 500);
       } else {
-        console.log('MATCH');
+        //console.log('MATCH', { firstCard });
       }
     }
-    openCardAction({ num, cardIndex });
+
+    setTimeout(() => {
+      openCardAction({ num, cardIndex });
+    }, 100);
+
     this.flipCard();
   };
 
-  // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { num, visitedArray } = this.props;
-    /*
-    if (visitedArray !== undefined) {
-      if (visitedArray.length !== 0) {
-        return;
+    const { num, cardIndex } = this.props;
+
+    if (
+      nextProps.requestFlipByCardIndex !== undefined &&
+      cardIndex === nextProps.requestFlipByCardIndex
+    ) {
+      /*
+      console.log(
+        'UNSAFE_componentWillReceiveProps',
+        { nextProps },
+        { props: this.props }
+      );*/
+
+      if (this.value !== 0) {
+        setTimeout(() => {
+          this.flipCard();
+          // eslint-disable-next-line react/destructuring-assignment
+          this.props.flipSuccess({
+            cardIndex,
+          });
+        }, 1000);
       }
     }
-*/
+
     if (nextProps.num !== num) {
       // Perform some operation
 
@@ -104,7 +121,6 @@ class Card extends React.Component {
   }
 
   flipCard() {
-    console.log(this.value);
     if (this.value >= 90) {
       Animated.spring(this.animatedValue, {
         toValue: 0,
@@ -201,6 +217,7 @@ const mapStateToProps = state => {
     visitedArray,
     flipBackCard,
     disabledIndexArray,
+    requestFlipByCardIndex,
   } = state;
   return {
     stepCount,
@@ -208,6 +225,8 @@ const mapStateToProps = state => {
     firstCardIndex,
     visitedArray,
     disabledIndexArray,
+    flipBackCard,
+    requestFlipByCardIndex,
   };
 };
 
@@ -215,6 +234,8 @@ Card.propTypes = {
   num: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   increaseStepCount: PropTypes.func,
   openCard: PropTypes.func,
+  closeFirstCard: PropTypes.func,
+  flipSuccess: PropTypes.func,
   firstCard: PropTypes.number,
   firstCardIndex: PropTypes.number,
   cardIndex: PropTypes.number,
@@ -222,4 +243,9 @@ Card.propTypes = {
   disabledIndexArray: PropTypes.array,
 };
 
-export default connect(mapStateToProps, { increaseStepCount, openCard })(Card);
+export default connect(mapStateToProps, {
+  increaseStepCount,
+  openCard,
+  closeFirstCard,
+  flipSuccess,
+})(Card);

@@ -14,16 +14,27 @@ import * as actionCreator from '../redux/actionCreators';
 
 const { initPairArray, reset } = actionCreator;
 const HomeScreen = () => {
-  const PAIR = 2;
+  const PAIR = 4;
   const dispatch = useDispatch();
   const pairArr = useSelector(state => state.pairArray);
   const stepCount = useSelector(state => state.stepCount);
   const disabledIndexArray = useSelector(state => state.disabledIndexArray);
+  const flippedCard = useSelector(state => state.flippedCard);
 
   useEffect(() => {
     generateNums();
     return () => {};
   }, [generateNums]);
+
+  useEffect(() => {
+    /*
+    console.log(
+      'USE EFFECT',
+      { disabledIndexArray },
+      { pairArr },
+      { flippedCard }
+    );*/
+  }, [disabledIndexArray, flippedCard, pairArr]);
 
   const restart = () => {
     generateNums();
@@ -76,7 +87,6 @@ const HomeScreen = () => {
     );
 
   const bounces = PAIR > 4;
-
   return (
     <>
       <View style={styles.mainContainer}>
@@ -90,6 +100,9 @@ const HomeScreen = () => {
           </TouchableHighlight>
 
           <Text>Steps:{stepCount}</Text>
+          <Text>
+            {pairArr.length}:{disabledIndexArray.length}
+          </Text>
         </View>
         {disabledIndexArray.length === pairArr.length &&
           pairArr.length !== 0 &&
